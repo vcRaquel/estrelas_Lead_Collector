@@ -10,5 +10,7 @@ public interface ProdutoRepository extends CrudRepository<Produto, Integer> {
     //=1% significa primeira posição
     // a Query acima retornaria o objeto inteiro e não apenas uma afirmação de se ele existe ou não
     boolean existsByNome(String nome);
+    //a diferença entre um exists e find é que o retorno do primeiro é boolean e mais rápido
+    // e do segundo o retorno é um objeto e mais demorado
 
 }
