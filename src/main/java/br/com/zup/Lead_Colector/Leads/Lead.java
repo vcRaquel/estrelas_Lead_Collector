@@ -16,7 +16,13 @@ public class Lead {
     //o default irá atribuir a frase e não com null caso não seja preenchido
     private String nome;
     //deu erro no primeiro run pq não tinha a anotação do tipo de relacionamento dessa lista nessa entidade
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    //foi acrescentado o cascade Merge para que o nome do produto fosse enviado para o banco de dados
+    //o Persist vai salvar no banco de dados um relacionamento entre as duas tabelas
+    //o Merge irá receber o produto e salvar o produto na tabela (mescla de informações)
+    //persist pq o all é perigoso pois força mudanças não desejadas
+    // só pode ser usado quando se tem muita certeza do que está fazendo
+    //avalie e inclua de acordo com a sua necessidade
     private List<Produto> produtosDeInteresse;
 
     //não fez construtor, pois por padrão já tem um construtor vazio

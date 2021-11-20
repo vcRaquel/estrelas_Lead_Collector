@@ -8,7 +8,7 @@ public class Produto {
     @Id //já garante que será único e não null
     @GeneratedValue(strategy = GenerationType.IDENTITY)//corresponde ao auto_increment
     private int id;
-    @Column(unique = true)//o nome será único na regra de negócio
+    @Column(unique = true, nullable = false)//o nome será único na regra de negócio
     private String nome;
 
     //não colocou construtor
