@@ -12,5 +12,6 @@ public interface ProdutoRepository extends CrudRepository<Produto, Integer> {
     boolean existsByNome(String nome);
     //a diferença entre um exists e find é que o retorno do primeiro é boolean e mais rápido
     // e do segundo o retorno é um objeto e mais demorado
+    Produto findByNome(String Nome);
 
 }
