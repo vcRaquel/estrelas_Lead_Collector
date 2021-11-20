@@ -13,7 +13,8 @@ import java.util.List;
 public class Lead {
     @Id
     private String email;
-    @Column(columnDefinition = "VARCHAR(100) DEFAULT'Não informado'")
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'Não informado'")
     //irá dizer o tipo e tamanho da coluna na tabela do BD
     //o default irá atribuir a frase e não com null caso não seja preenchido
     private String nome;
