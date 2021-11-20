@@ -8,4 +8,8 @@ public class LeadService {
     @Autowired
     LeadRepository leadRepository;
 
+    public Lead salvarLead(Lead lead){
+        return leadRepository.save(lead);
+    }
+
 }
