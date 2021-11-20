@@ -2,10 +2,7 @@ package br.com.zup.Lead_Colector.Leads;
 
 import br.com.zup.Lead_Colector.produtos.Produto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -18,6 +15,8 @@ public class Lead {
     //irá dizer o tipo e tamanho da coluna na tabela do BD
     //o default irá atribuir a frase e não com null caso não seja preenchido
     private String nome;
+    //deu erro no primeiro run pq não tinha a anotação do tipo de relacionamento dessa lista nessa entidade
+    @ManyToMany
     private List<Produto> produtosDeInteresse;
 
     //não fez construtor, pois por padrão já tem um construtor vazio
