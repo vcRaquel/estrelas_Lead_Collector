@@ -50,7 +50,7 @@ public class LeadServiceTest {
     }
 
     @Test
-    public void testarBuscarProdutosExistentesCaminhoPositivo(){
+    public void testarBuscarProdutosCadastradosCaminhoPositivo(){
         Mockito.when(produtoRepository.existsByNome(Mockito.anyString())).thenReturn(true);
         Mockito.when(produtoRepository.findByNome(Mockito.anyString())).thenReturn(produto);
 
