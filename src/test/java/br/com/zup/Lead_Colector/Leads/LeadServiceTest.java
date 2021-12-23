@@ -50,7 +50,7 @@ public class LeadServiceTest {
     }
 
     @Test
-    public void testarBuscarProdutosCaminhoPositivo(){
+    public void testarBuscarProdutosExistentesCaminhoPositivo(){
         Mockito.when(produtoRepository.existsByNome(Mockito.anyString())).thenReturn(true);
         Mockito.when(produtoRepository.findByNome(Mockito.anyString())).thenReturn(produto);
 
@@ -60,6 +60,7 @@ public class LeadServiceTest {
             //"esse produto que está na lista atualizada é o mesmo produto que ele retornou do repositório?
             // ou: "o produto que está vindo do repositório, tá entrando na lista?"
             Assertions.assertEquals(produtoDaListaAtualizada, produto);
+            Assertions.assertEquals(produtoDaListaAtualizada.getId(),produto.getId());
 
             //testar se o método está retornando uma lista/ O que o método está me retornando é uma lista mesmo?
             Assertions.assertTrue(listaAtualizada instanceof List<?>);
