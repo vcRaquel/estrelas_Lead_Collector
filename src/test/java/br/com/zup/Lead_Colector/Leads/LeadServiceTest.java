@@ -61,11 +61,37 @@ public class LeadServiceTest {
             // ou: "o produto que está vindo do repositório, tá entrando na lista?"
             Assertions.assertEquals(produtoDaListaAtualizada, produto);
             Assertions.assertEquals(produtoDaListaAtualizada.getId(),produto.getId());
-
-            //testar se o método está retornando uma lista/ O que o método está me retornando é uma lista mesmo?
-            Assertions.assertTrue(listaAtualizada instanceof List<?>);
         }
 
+        //testar se o método está retornando uma lista/ O que o método está me retornando é uma lista mesmo?
+        Assertions.assertTrue(listaAtualizada instanceof List<?>);
+
+    }
+
+    @Test
+    public void testarBuscarProdutosNaoCadastradosCaminhoPositivo(){
+        var produtoNaoCadastrado = new Produto();
+        produtoNaoCadastrado.setNome("Dinamite Pangaláctica");
+
+        Mockito.when(produtoRepository.existsByNome(Mockito.anyString())).thenReturn(false);
+
+        //a lista irá receber o produtoNaoCadastrado, pois simula a situação de buscar produtos não cadastrados
+        List<Produto> listaAtualizada = leadService.buscarProdutos(Arrays.asList(produtoNaoCadastrado));
+
+        for (Produto produtoDaListaAtualizada : listaAtualizada){
+            //"esse produto que está na lista atualizada é o mesmo produto que ele retornou do repositório?
+            // ou: "o produto que está vindo do repositório, tá entrando na lista?"
+            Assertions.assertNotEquals(produtoDaListaAtualizada, produto);
+            //quando um objeto não existe no banco de dados e o id é inexistente,
+            //recebe o valor nulo de int que corresponde a 0 (se fosse Integer, seria null)
+            Assertions.assertEquals(produtoDaListaAtualizada.getId(),0);
+
+
+        }
+
+        Mockito.verify(produtoRepository, Mockito.times(0)).findByNome(Mockito.anyString());
+        //testar se o método está retornando uma lista/ O que o método está me retornando é uma lista mesmo?
+        Assertions.assertTrue(listaAtualizada instanceof List<?>);
     }
 
 }
