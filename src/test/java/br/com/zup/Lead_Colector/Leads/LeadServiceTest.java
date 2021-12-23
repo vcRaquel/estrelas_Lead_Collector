@@ -1,16 +1,17 @@
-package Leads;
+package br.com.zup.Lead_Colector.Leads;
 
-import br.com.zup.Lead_Colector.Leads.Lead;
-import br.com.zup.Lead_Colector.Leads.LeadRepository;
-import br.com.zup.Lead_Colector.Leads.LeadService;
 import br.com.zup.Lead_Colector.produtos.Produto;
 import br.com.zup.Lead_Colector.produtos.ProdutoRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootTest
 public class LeadServiceTest {
@@ -29,6 +30,7 @@ public class LeadServiceTest {
     //Atributos
     private Lead lead;
     private Produto produto;
+    private List<Produto>produtos;
 
     //método pra ser executado antes dos outros métodos e criar as instâncias necessárias
     @BeforeEach
@@ -43,7 +45,26 @@ public class LeadServiceTest {
 
         //Arrays.asList é usado para criar uma lista array já passando os itens da lista
         // e atribui ao lead por meio do setProdutosDeInteresse
-        lead.setProdutosDeInteresse(Arrays.asList(produto));
+        produtos = Arrays.asList(produto);
+        lead.setProdutosDeInteresse(produtos);
+    }
+
+    @Test
+    public void testarBuscarProdutosCaminhoPositivo(){
+        Mockito.when(produtoRepository.existsByNome(Mockito.anyString())).thenReturn(true);
+        Mockito.when(produtoRepository.findByNome(Mockito.anyString())).thenReturn(produto);
+
+        List<Produto> listaAtualizada = leadService.buscarProdutos(produtos);
+
+        for (Produto produtoDaListaAtualizada : listaAtualizada){
+            //"esse produto que está na lista atualizada é o mesmo produto que ele retornou do repositório?
+            // ou: "o produto que está vindo do repositório, tá entrando na lista?"
+            Assertions.assertEquals(produtoDaListaAtualizada, produto);
+
+            //testar se o método está retornando uma lista/ O que o método está me retornando é uma lista mesmo?
+            Assertions.assertTrue(listaAtualizada instanceof List<?>);
+        }
+
     }
 
 }

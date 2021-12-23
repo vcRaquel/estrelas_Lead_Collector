@@ -55,7 +55,7 @@ public class LeadService {
         return leadRepository.save(lead);
     }
 
-    private List<Produto> buscarProdutos(List<Produto> produtos) {
+    public List<Produto> buscarProdutos(List<Produto> produtos) {
         //instancia uma lista que irá armazenar os produtos atualizados(que já constavam no banco de dados)
         // e os cadastrados
         List<Produto>listaAtualizada = new ArrayList<>();
