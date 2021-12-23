@@ -12,6 +12,9 @@ import java.util.Optional;
 
 @Service
 public class LeadService {
+    // ??? o fato de ter duas injeções de dependência de repositorys diferentes
+    // não fere o critério de responsabilidade única?
+    // O adequado seria ter um método na service de produto que fizesse a ação pretendida na repository de produto?
     @Autowired
     private LeadRepository leadRepository;
     @Autowired
