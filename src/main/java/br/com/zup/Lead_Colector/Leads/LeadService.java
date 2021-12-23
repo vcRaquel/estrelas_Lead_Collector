@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LeadService {
@@ -17,7 +18,34 @@ public class LeadService {
     ProdutoRepository produtoRepository;
 
     public Lead salvarLead(Lead lead) {
-        List<Produto>produtos = buscarProdutos(lead.getProdutosDeInteresse());
+        //pegar a lista de produtos que já estão cadastrados
+        // e juntar com os produtos que estão sendo recebidos na requisição
+        List<Produto> produtos = buscarProdutos(lead.getProdutosDeInteresse());
+
+        //pegar o lead (pelo email) que está no banco de dados com a lista que já existe e só adicionar essa lista
+        Optional<Lead> leadOptional = leadRepository.findById(lead.getEmail());
+
+        //se o Lead com o email informado na requisição estiver presente no banco de dados
+        // (e consequentemente dentro do optional)
+        if (leadOptional.isPresent()){
+
+            //tirando o Lead que veio do banco de dentro do optional para ficar mais visível e didático:
+            Lead leadDoBanco = leadOptional.get();
+
+            //um for que irá percorrer a lista de produtos adicionando apenas os produtos novos
+            for (Produto produto : produtos){
+
+                //se nos produtos do lead do banco NÃO (!) contiver o produto
+                if (!leadDoBanco.getProdutosDeInteresse().contains(produto)){
+                    //adiciona o produto dentro da lista
+                    leadDoBanco.getProdutosDeInteresse().add(produto);
+                }
+            }
+
+            //irá salvar o lead do banco com a nova lista de produtos
+            return leadRepository.save(leadDoBanco);
+        }
+        //se o Lead com o email informado na requisição NÂO estiver presente no banco de dados:
         //colocando a lista de produtos atualizada no lead
         lead.setProdutosDeInteresse(produtos);
         //salvando o lead no banco de dados

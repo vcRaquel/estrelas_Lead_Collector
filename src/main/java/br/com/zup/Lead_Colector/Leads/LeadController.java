@@ -17,7 +17,7 @@ public class LeadController {
     }
 
     @GetMapping()
-    //localhost:8080/leads?Produto=Playstation
+    //localhost:8080/leads?nomeProduto=Playstation
     //o ? é usado para indicar o @Requestparam que será recebido,
     // em seguida é colocado o nome do atributo a ser filtrado e o valor de atributo a ser encontrado
     public List<Lead> buscarProdutos(@RequestParam String nomeProduto){
