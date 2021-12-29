@@ -1,6 +1,7 @@
 package br.com.zup.Lead_Colector.Leads;
 
 import br.com.zup.Lead_Colector.produtos.Produto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,9 +37,15 @@ public class LeadControllerTest {
     private Produto produto;
     private List<Produto> produtos;
 
+    //ObjectMapper é um objeto que pode transformar objeto em String e String em objeto.
+    //Usamos ele para poder transformar objetos em json (que no java é uma String)
+    private ObjectMapper objectMapper;
+
     //instancia os objetos em um método setup com a anotação @BeforeEach
     @BeforeEach
     public void setup() {
+        objectMapper = new ObjectMapper();
+
         lead = new Lead();
         lead.setNome("Billy");
         lead.setId(1);
@@ -53,7 +60,7 @@ public class LeadControllerTest {
     }
 
     @Test
-    //o método perform pode estourar uma exception e por isso precisa colocar um throws Exception na assinara do método
+    //o método perform pode estourar exception por isso precisa colocar um throws Exception na assinatura do método
     public void testarRotaPataBuscarProdutos() throws Exception{
         //fazer mockito do método relacionado à service que está sendo chamado no método de mapeamento GET
         //na Controller a ser testada.
@@ -83,6 +90,38 @@ public class LeadControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
                 //é possível ter mais de um .andExpect mesmo ResultActions.
                 // Neste, testamos se o corpo (Path) da requisição é um array. O "$" simboliza o objeto
+    }
+
+    @Test
+    //o método writeValueAsString pode estourar uma exception,
+    // por isso colocamos um throws Exception na assinatura do método
+    public void testarRotaParaCadastrarLeadValidacoesEmail() throws Exception{
+        //criar mockito do método relacionado à service
+        //quando o metodo salvarLead receber como parametro um lead irá retornar o lead instanciado no setup
+        Mockito.when(leadService.salvarLead(Mockito.any(Lead.class))).thenReturn(lead);
+
+        //colocando dados inválidos para dar veracidade ao teste de validação
+        lead.setEmail("jklhrfgasdk");
+
+        //Será preciso transformar o objeto para o corpo em String já que no java o json corresponde ao formato String
+        //para essa transformação usamos o objectMapper instanciado
+        //que é um tipo capaz de transformar objeto em String e String em objeto
+        String json = objectMapper.writeValueAsString(lead);// criamos uma variável do tipo String nomeada json,
+        //atribuimos o objectMapper aplicando o método .writeValueAsString passando como parametro
+        // o objeto a ser transformado em String/json, no caso, lead
+
+        ResultActions respostaDaRequisicao = mockMvc.perform(MockMvcRequestBuilders.put("/leads")
+                .contentType(MediaType.APPLICATION_JSON)
+                //para passar o body json usamos o .content e passamos como parametro a variável objectMapper que
+                //transformou o objeto lead em String o que no java corresponde ao formato json
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().is(422));//unprocessable entity
+        //porém para que o teste de validação dê certo é preciso verificar se:
+        //o @Valid está sendo aplicado no parametro do método na controller
+        //os dados testados estão com as anotações de validação, no caso do email o @Email na modal Lead
+        //(o certo seria uma dto de entrada)
+        //se a exception está sendo tratada na Controlleradvice (que fica na pasta config)
+
     }
 
 }
