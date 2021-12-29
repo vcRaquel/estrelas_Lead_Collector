@@ -3,6 +3,7 @@ package br.com.zup.Lead_Colector.Leads;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -12,7 +13,7 @@ public class LeadController {
     private LeadService leadService;
 
     @PutMapping
-    public Lead cadastrarLead(@RequestBody Lead lead){
+    public Lead cadastrarLead(@RequestBody @Valid Lead lead){
         return leadService.salvarLead(lead);
     }
 
