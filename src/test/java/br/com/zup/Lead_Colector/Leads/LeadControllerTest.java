@@ -124,4 +124,26 @@ public class LeadControllerTest {
 
     }
 
+
+    @Test
+    public void testarRotaParaCadastrarLead() throws Exception{
+        Mockito.when(leadService.salvarLead(Mockito.any(Lead.class))).thenReturn(lead);
+        //não colocou valores errados para teste de validação
+
+        String json = objectMapper.writeValueAsString(lead);// criamos uma variável do tipo String nomeada json,
+
+        ResultActions respostaDaRequisicao = mockMvc.perform(MockMvcRequestBuilders.put("/leads")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                //mudou a resposta para 200 (ok)
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
+        //testando se o objeto retornardo no corpo da resposta é do tipo Lead:
+        //transformando o corpo da resposta em String
+        String jsonDeRespostaDaAPI = respostaDaRequisicao.andReturn().getResponse().getContentAsString();
+        //comparando a String do corpo da resposta (json) com um objeto Lead.
+        //Se conseguiu converter o json em Lead é pq é compatível
+        Lead leadDaResposta = objectMapper.readValue(jsonDeRespostaDaAPI, Lead.class);
+    }
+
 }
