@@ -3,12 +3,17 @@ package br.com.zup.Lead_Colector.Leads;
 import br.com.zup.Lead_Colector.produtos.Produto;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @Entity
 @Table(name = "leads")
 public class Lead {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Email
     private String email;
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'Não informado'")
@@ -43,6 +48,14 @@ public class Lead {
         this.nome = nome;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public List<Produto> getProdutosDeInteresse() {
         return produtosDeInteresse;
     }
@@ -50,4 +63,5 @@ public class Lead {
     public void setProdutosDeInteresse(List<Produto> produtosDeInteresse) {
         this.produtosDeInteresse = produtosDeInteresse;
     }
+
 }
