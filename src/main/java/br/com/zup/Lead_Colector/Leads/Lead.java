@@ -4,6 +4,7 @@ import br.com.zup.Lead_Colector.produtos.Produto;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,7 @@ public class Lead {
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'Não informado'")
     //irá dizer o tipo e tamanho da coluna na tabela do BD
     //o default irá atribuir a frase e não com null caso não seja preenchido
+    @Size(min = 2)
     private String nome;
     //deu erro no primeiro run pq não tinha a anotação do tipo de relacionamento dessa lista nessa entidade
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
